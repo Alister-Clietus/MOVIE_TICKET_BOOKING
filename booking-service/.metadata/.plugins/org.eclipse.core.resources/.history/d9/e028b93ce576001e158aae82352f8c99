@@ -1,0 +1,5 @@
+package com.movie.moviebooing.service;
+
+public interface BookingCrudServices {
+
+}

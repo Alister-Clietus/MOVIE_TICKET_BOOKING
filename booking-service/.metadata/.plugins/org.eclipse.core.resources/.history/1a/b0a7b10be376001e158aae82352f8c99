@@ -1,0 +1,15 @@
+package com.movie.moviebooing.entity;
+
+import java.sql.Date;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EmbeddedId;
+
+@Embeddable
+public class BookingID 
+{
+	
+	
+
+}

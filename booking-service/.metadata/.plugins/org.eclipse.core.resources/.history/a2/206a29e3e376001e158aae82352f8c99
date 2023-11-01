@@ -1,0 +1,5 @@
+package com.movie.moviebooing.repository;
+
+public interface BookingTable {
+
+}

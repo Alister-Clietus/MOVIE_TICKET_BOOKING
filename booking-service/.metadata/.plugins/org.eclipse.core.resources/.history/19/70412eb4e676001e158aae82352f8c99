@@ -1,0 +1,16 @@
+package com.movie.moviebooing.entity;
+
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+
+
+@Embeddable
+public class BookingID 
+{
+	@Column(name="Name")
+	private String customerName;
+	@Column(name="Phone")
+    private String customerPhone;
+
+}

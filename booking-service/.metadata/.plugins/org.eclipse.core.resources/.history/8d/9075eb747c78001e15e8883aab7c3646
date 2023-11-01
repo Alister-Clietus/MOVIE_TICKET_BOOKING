@@ -1,0 +1,413 @@
+package com.movie.moviebooing.serviceimp;
+
+import java.awt.print.Pageable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.movie.moviebooing.dto.BookingIdDTO;
+import com.movie.moviebooing.dto.BookingResponse;
+import com.movie.moviebooing.dto.TicketBookingDTO;
+import com.movie.moviebooing.entity.BookingEntity;
+import com.movie.moviebooing.entity.BookingID;
+import com.movie.moviebooing.repository.BookingTable;
+import com.movie.moviebooing.repository.specifications.SecurityUserSpec;
+import com.movie.moviebooing.service.BookingCrudServices;
+
+import jakarta.persistence.criteria.Predicate;
+
+@Service
+public class BookingCrudServiceImp implements BookingCrudServices
+{
+	@Autowired
+	BookingTable repo;
+	
+	public BookingResponse postService(TicketBookingDTO bdto) {
+	    try {
+	        BookingEntity bookingEntity = new BookingEntity();
+	        BookingID bookingID = new BookingID();
+
+	        bookingID.setCustomerName(bdto.getCustomerName());
+	        bookingID.setCustomerPhone(bdto.getCustomerPhone());
+	        bookingEntity.setId(bookingID);
+
+	        bookingEntity.setMovieId(bdto.getMovieId());
+	        bookingEntity.setShowtimeId(bdto.getShowtimeId());
+	        bookingEntity.setNumberOfTickets(bdto.getNumberOfTickets());
+	        bookingEntity.setEmail(bdto.getCustomerEmail());
+	        bookingEntity.setPaymentMethod(bdto.getPaymentMethod());
+	        bookingEntity.setTotalAmount(bdto.getTotalAmount());
+	        bookingEntity.setBookingDate(bdto.getBookingDate());
+	        bookingEntity.setStatus("PENDING");
+	        bookingEntity.setCreatedby(new Date());
+	        bookingEntity.setModifiedby(new Date());
+
+	        repo.save(bookingEntity);
+	        return new BookingResponse("Post Successful", "Successful", null);
+	    } 
+	    catch (Exception e) 
+	    {
+	       
+	        e.printStackTrace(); 
+	        return new BookingResponse("Exception error", "Unsuccessful", null);
+	    }
+	}
+
+
+	
+	public JSONObject getService() {
+	    JSONObject result = new JSONObject();
+	    JSONArray bookingsArray = new JSONArray();
+	    
+	    try {
+	        List<BookingEntity> bookingEntities = repo.findAll();
+	    
+	        for (BookingEntity entity : bookingEntities) {
+	            JSONObject bookingObject = new JSONObject();
+	            bookingObject.put("movieId", entity.getMovieId());
+	            bookingObject.put("showtimeId", entity.getShowtimeId());
+	            bookingObject.put("numberOfTickets", entity.getNumberOfTickets());
+	            bookingObject.put("customerName", entity.getId().getCustomerName());
+	            bookingObject.put("customerPhone", entity.getId().getCustomerPhone());
+	            bookingObject.put("customerEmail", entity.getEmail());
+	            bookingObject.put("paymentMethod", entity.getPaymentMethod());
+	            bookingObject.put("totalAmount", entity.getTotalAmount());
+	            bookingObject.put("bookingDate", entity.getBookingDate());
+	            bookingObject.put("status", entity.getStatus());
+	    
+	            bookingsArray.add(bookingObject);
+	        }
+	    
+	        result.put("bookings", bookingsArray);
+	    } 
+	    catch (Exception e) 
+	    {
+	       
+	        e.printStackTrace(); 
+	        result.put("error", "Exception error");
+	    }
+	    
+	    return result;
+	}
+
+
+	
+	
+	public BookingResponse deleteService(String customerName, String customerPhone) 
+	{
+		try
+		{
+		BookingID bookingID = new BookingID();
+		bookingID.setCustomerName(customerName);
+        bookingID.setCustomerPhone(customerPhone);
+        Optional<BookingEntity> bookingOptional = repo.findById(bookingID);
+        if (bookingOptional.isPresent()) {
+            // Get the booking entity
+            BookingEntity bookingEntity = bookingOptional.get();
+
+            // Delete the booking entity
+            repo.delete(bookingEntity);
+
+            return new BookingResponse("Data Deleted Successfully",
+    				"Data Deleted Successfully",null);
+        } else {
+        	return new BookingResponse("Data Not Deleted Successfully",
+    				"Data Not Deleted Successfully",null);
+        }
+    } 
+		catch (Exception e) 
+    {
+    	return new BookingResponse("Data Deleetd  unSuccessfully",
+				"unSuccessfull Exception Occured",null);
+    }
+   }
+	
+
+	
+	
+	public BookingResponse verifyService(BookingIdDTO iddto) 
+	{
+		try 
+		{
+		BookingID bookingID = new BookingID();
+		bookingID.setCustomerName(iddto.getCustomerName());
+        bookingID.setCustomerPhone(iddto.getCustomerPhone());
+        Optional<BookingEntity> bookingOptional = repo.findById(bookingID);
+        if (bookingOptional.isPresent()) {
+           
+            BookingEntity bookingEntity = bookingOptional.get();
+
+           
+            bookingEntity.setStatus("verified");
+            bookingEntity.setModifiedby(new Date());
+
+           
+            repo.save(bookingEntity);
+
+            return new BookingResponse("Data Verified Successfully",
+    				"Data Verified Successfully",null);
+        } 
+        else 
+        {
+        	return new BookingResponse("Data Verified UnSuccessfully not found",
+    				"Data Verified UnSuccessfully not found",null);
+        }
+    } catch (Exception e) {
+    	return new BookingResponse("Exception error",
+				"Exception error",null);
+    }
+		
+	}
+
+	
+	
+	public BookingResponse updateService(TicketBookingDTO bdto) 
+	{
+		try
+		{
+		BookingID bookingID = new BookingID();
+        bookingID.setCustomerName(bdto.getCustomerName());
+        bookingID.setCustomerPhone(bdto.getCustomerPhone());
+
+        Optional<BookingEntity> bookingOptional = repo.findById(bookingID);
+
+        if (bookingOptional.isPresent()) 
+        {
+      
+            BookingEntity bookingEntity = bookingOptional.get();
+
+           
+            bookingEntity.setMovieId(bdto.getMovieId());
+            bookingEntity.setShowtimeId(bdto.getShowtimeId());
+            bookingEntity.setNumberOfTickets(bdto.getNumberOfTickets());
+            bookingEntity.setEmail(bdto.getCustomerEmail()); 
+            bookingEntity.setPaymentMethod(bdto.getPaymentMethod());
+            bookingEntity.setTotalAmount(bdto.getTotalAmount());
+            bookingEntity.setModifiedby(new Date());
+            repo.save(bookingEntity);
+
+            return new BookingResponse("Data Updated Successfully",
+    				"Data Updated Successfully",null);
+        } else 
+        {
+        	return new BookingResponse("Data Updated UnSuccessfully User not found",
+    				"Data Updated UnSuccessfully User not found",null);
+        }
+    } 
+		catch (Exception e) 
+		{
+    	return new BookingResponse("Exception error",
+				"UnSucessfull",null);
+        }
+		
+	}
+
+
+	public JSONObject getbyidService(String customerName, String customerPhone)
+	{
+		try
+		{
+		BookingID bookingID = new BookingID();
+		bookingID.setCustomerName(customerName);
+        bookingID.setCustomerPhone(customerPhone);
+        
+        Optional<BookingEntity> bookingOptional = repo.findById(bookingID);
+        
+        if (bookingOptional.isPresent())
+        {
+        	BookingEntity bookingEntity = bookingOptional.get();
+        	JSONObject bookingObject = new JSONObject();
+        	bookingObject.put("movieId", bookingEntity.getMovieId());
+            bookingObject.put("showtimeId", bookingEntity.getShowtimeId());
+            bookingObject.put("numberOfTickets", bookingEntity.getNumberOfTickets());
+            bookingObject.put("customerName", bookingEntity.getId().getCustomerName());
+            bookingObject.put("customerPhone", bookingEntity.getId().getCustomerPhone());
+            bookingObject.put("customerEmail", bookingEntity.getEmail());
+            bookingObject.put("paymentMethod", bookingEntity.getPaymentMethod());
+            bookingObject.put("totalAmount", bookingEntity.getTotalAmount());
+            bookingObject.put("bookingDate", bookingEntity.getBookingDate());
+            bookingObject.put("status", bookingEntity.getStatus());
+            
+            return bookingObject;
+            
+        }
+        else
+        {
+        	 return null;
+        }
+        
+		}
+		catch(Exception e)
+		{
+			 return null;
+		}
+		
+	}
+	
+	
+	public JSONObject searchByLimit(String searchParam, int start, int pageSize) {
+		JSONObject result = new JSONObject();
+		try {
+			PageRequest pageable = PageRequest.of(start / pageSize, pageSize);
+			Specification<BookingEntity> spec = SecurityUserSpec.getUserSpec(searchParam);
+			Page<BookingEntity> usersList = repo.findAll(spec, pageable);
+			JSONArray array = new JSONArray();
+			JSONArray countByStatus = countByStatus(spec);
+			for (BookingEntity users : usersList) {
+				JSONObject obj = new JSONObject();
+				JSONObject bookingObject = new JSONObject();
+	            bookingObject.put("movieId", users.getMovieId());
+	            bookingObject.put("showtimeId", users.getShowtimeId());
+	            bookingObject.put("numberOfTickets", users.getNumberOfTickets());
+	            bookingObject.put("customerName", users.getId().getCustomerName());
+	            bookingObject.put("customerPhone", users.getId().getCustomerPhone());
+	            bookingObject.put("customerEmail", users.getEmail());
+	            bookingObject.put("paymentMethod", users.getPaymentMethod());
+	            bookingObject.put("totalAmount", users.getTotalAmount());
+	            bookingObject.put("bookingDate", users.getBookingDate());
+	            bookingObject.put("status", users.getStatus());
+	    
+	            array.add(bookingObject);
+			}
+			result.put("aaData", array);
+//			result.put("iTotalDisplayRecords", studentrepo.findAll(spec).size());
+//			result.put("iTotalRecords", studentrepo.findAll(spec).size());
+			result.put("countByStatus", countByStatus);
+		} catch (Exception e) {
+//			logger.error("Error : " + e.getMessage(), e);
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private JSONArray countByStatus(Specification<BookingEntity> spec) {
+		JSONArray array = new JSONArray();
+		try {
+			List<BookingEntity> headerList = repo.findAll(spec);
+			Map<String, Long> countByStatus = headerList.stream()
+					.collect(Collectors.groupingBy(BookingEntity::getStatus, Collectors.counting()));
+			for (String status : countByStatus.keySet()) {
+				JSONObject obj = new JSONObject();
+				obj.put("name", status);
+				obj.put("count", countByStatus.get(status));
+				array.add(obj);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return array;
+	}
+
+
+	
+	public Specification<BookingEntity> searchByParameters(TicketBookingDTO searchParam) 
+	{
+        Specification<BookingEntity> spec = (root, query, criteriaBuilder) -> 
+        {
+//            List<Predicate> predicates = new ArrayList<>();
+        	Predicate finalPredicate = null;
+        	try {
+            if (searchParam.getMovieId() != 0) {
+            	Predicate movieidPredicate= criteriaBuilder.equal(root.get("movieId"), searchParam.getMovieId());
+            	finalPredicate = criteriaBuilder.and(movieidPredicate);
+            }
+            if (searchParam.getBookingDate() != null) {
+            	Predicate bookingdatePredicate= criteriaBuilder.equal(root.get("bookingDate"), searchParam.getBookingDate());
+            	if(finalPredicate!=null) {
+            		finalPredicate = criteriaBuilder.and(finalPredicate,bookingdatePredicate);
+            	}else {
+            		finalPredicate = criteriaBuilder.and(bookingdatePredicate);
+            	}
+            }
+            if (searchParam.getShowtimeId() != 0) {
+            	Predicate showtimepredicates=criteriaBuilder.equal(root.get("showtimeId"), searchParam.getShowtimeId());
+            	if(finalPredicate!=null) {
+            		finalPredicate = criteriaBuilder.and(finalPredicate,showtimepredicates);
+            	}else {
+            		finalPredicate = criteriaBuilder.and(showtimepredicates);
+            	}
+            }
+            if (searchParam.getCustomerName() != null) {
+            	Predicate namepredicates=criteriaBuilder.equal(root.get("id").get("customerName"), searchParam.getCustomerName());
+            	if(finalPredicate!=null) {
+            		finalPredicate = criteriaBuilder.and(finalPredicate,namepredicates);
+            	}else {
+            		finalPredicate = criteriaBuilder.and(namepredicates);
+            	}
+            }
+            if (searchParam.getCustomerPhone() != null) {
+            	Predicate phonepredicates=criteriaBuilder.equal(root.get("id").get("customerPhone"), searchParam.getCustomerPhone());
+            	if(finalPredicate!=null) {
+            		finalPredicate = criteriaBuilder.and(finalPredicate,phonepredicates);
+            	}else {
+            		finalPredicate = criteriaBuilder.and(phonepredicates);
+            	}
+            }
+            if (searchParam.getCustomerEmail() != null) {
+            	Predicate emailpredicates=criteriaBuilder.equal(root.get("email"), searchParam.getCustomerEmail());
+            	if(finalPredicate!=null) {
+            		finalPredicate = criteriaBuilder.and(finalPredicate,emailpredicates);
+            	}else {
+            		finalPredicate = criteriaBuilder.and(emailpredicates);
+            	}
+            }
+            if (searchParam.getPaymentMethod() != null) {
+            	Predicate methodpredicates=criteriaBuilder.equal(root.get("paymentMethod"), searchParam.getMovieId());
+            	if(finalPredicate!=null) {
+            		finalPredicate = criteriaBuilder.and(finalPredicate,methodpredicates);
+            	}else {
+            		finalPredicate = criteriaBuilder.and(methodpredicates);
+            	}
+            }
+            if (searchParam.getNumberOfTickets() != 0) {
+            	Predicate numberpredicates=criteriaBuilder.equal(root.get("numberOfTickets"), searchParam.getNumberOfTickets());
+            	if(finalPredicate!=null) {
+            		finalPredicate = criteriaBuilder.and(finalPredicate,numberpredicates);
+            	}else {
+            		finalPredicate = criteriaBuilder.and(numberpredicates);
+            	}
+            }
+            if (searchParam.getTotalAmount() != 0) {
+            	Predicate amountpredicates=criteriaBuilder.equal(root.get("totalAmount"), searchParam.getTotalAmount());
+            	if(finalPredicate!=null) {
+            		finalPredicate = criteriaBuilder.and(finalPredicate,amountpredicates);
+            	}else {
+            		finalPredicate = criteriaBuilder.and(amountpredicates);
+            	}
+            }
+            
+            query.orderBy(criteriaBuilder.desc(root.get("createdby")));
+        	}
+        	
+        	catch(Exception e)
+        	{
+        		e.printStackTrace();
+        	}
+            return finalPredicate;
+        };
+        return spec;
+    }
+
+	public ResponseEntity<?> searchtrial(Specification<BookingEntity> results)
+	{
+		JSONObject result = new JSONObject();
+		List<BookingEntity> usersList = repo.findAll(results);
+		JSONArray array = new JSONArray();
+		return new ResponseEntity<>(usersList,HttpStatus.OK);
+		
+	}
+	
+}

@@ -1,0 +1,93 @@
+package com.movie.moviebooing.controller;
+
+
+import java.util.List;
+
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.movie.moviebooing.dto.BookingIdDTO;
+import com.movie.moviebooing.dto.TicketBookingDTO;
+import com.movie.moviebooing.entity.BookingEntity;
+import com.movie.moviebooing.service.BookingCrudServices;
+
+import jakarta.validation.Valid;
+
+@Controller
+@RequestMapping("/booking")
+public class BookingController 
+{
+	@Autowired
+	BookingCrudServices service;
+	
+	
+	@GetMapping("/get")
+	ResponseEntity<?> getDetails()
+	{
+		return new ResponseEntity<>(service.getService(),HttpStatus.OK);
+	}
+	
+	@PostMapping("/post")
+	ResponseEntity<@Valid ?> postDetails(@Valid @RequestBody TicketBookingDTO bdto)
+	{
+		return new ResponseEntity<>(service.postService(bdto),HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/delete/{customerName}/{customerPhone}")
+	ResponseEntity<?> deleteDetails(@PathVariable String customerName, @PathVariable String customerPhone)
+	{
+		return new ResponseEntity<>(service.deleteService(customerName,customerPhone),HttpStatus.OK);
+	}
+	
+	@PutMapping("/update")
+	ResponseEntity<?> putDetails(@Valid @RequestBody TicketBookingDTO bdto)
+	{
+		return new ResponseEntity<>(service.updateService(bdto),HttpStatus.OK);
+	}
+	
+	@PutMapping("/verify")
+	ResponseEntity<?> verifydetails(@Valid @RequestBody BookingIdDTO iddto)
+	{
+		return new ResponseEntity<>(service.verifyService(iddto),HttpStatus.OK);
+	}
+	
+	@GetMapping("/getdetails/{customerName}/{customerPhone}")
+	public ResponseEntity<?> getBookingDetails(@PathVariable String customerName, @PathVariable String customerPhone)
+	{
+		
+		return new ResponseEntity<>(service.getbyidService(customerName,customerPhone),HttpStatus.OK);
+	}
+	
+	@GetMapping("/search")
+	public ResponseEntity<JSONObject> searchByPage(@RequestParam("searchParam") @Valid String searchParam,
+			@RequestParam("iDisplayStart") @Valid String iDisplayStart,
+			@RequestParam("iDisplayLength") @Valid String iDisplayLength)
+	{
+		JSONObject list = service.searchByLimit(searchParam, Integer.parseInt(iDisplayStart),
+				Integer.parseInt(iDisplayLength));
+
+		return new ResponseEntity<>(list, new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	@PostMapping("/by-parameters")
+    public ResponseEntity<?> searchByParameters(@RequestParam("searchParam") String searchParam) {
+        Specification<BookingEntity> results = service.searchByParameters(searchParam);
+        service.searchtrial(results);
+        System.out.println(results);
+        return new ResponseEntity<>(service.searchtrial(results),HttpStatus.OK);
+    }
+
+}

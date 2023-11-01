@@ -1,0 +1,13 @@
+package com.movie.moviebooing.service;
+
+import com.movie.moviebooing.dto.BookingResponse;
+import com.movie.moviebooing.dto.TicketBookingDTO;
+
+public interface BookingCrudServices 
+{
+	BookingResponse postService(TicketBookingDTO bdto);
+	BookingResponse getService(TicketBookingDTO bdto);
+	BookingResponse deleteService(TicketBookingDTO bdto);
+	BookingResponse verifyService(TicketBookingDTO bdto);
+	BookingResponse updateService(TicketBookingDTO bdto);
+}

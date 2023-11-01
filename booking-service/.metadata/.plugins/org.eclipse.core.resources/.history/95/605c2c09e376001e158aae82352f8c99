@@ -1,0 +1,45 @@
+package com.movie.moviebooing.entity;
+
+import java.sql.Date;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="Ticket_Booking_Details")
+public class BookingEntity 
+{
+	@EmbeddedId
+    private BookingID id;
+    
+    @Column(name = "movie_id")
+    private int movieId;
+    
+    @Column(name = "showtime_id")
+    private int showtimeId;
+    
+    
+    @Column(name = "payment_method")
+    private String paymentMethod;
+    
+    @Column(name = "total_amount")
+    private double totalAmount;
+    
+    @Column(name = "booking_date")
+    private String bookingDate;
+    
+    @Column(name = "status")
+    private String status;
+    
+    @Column(name = "created_by")
+    private Date createdby;
+    
+    @Column(name = "modified_by")
+    private Date modifiedby;
+    
+    @Column(name = "Phonenumber")
+    private Date phone;
+
+}

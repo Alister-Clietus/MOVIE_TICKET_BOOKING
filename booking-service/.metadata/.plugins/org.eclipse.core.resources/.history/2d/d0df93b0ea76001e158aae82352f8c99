@@ -1,0 +1,55 @@
+package com.movie.moviebooing.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.movie.moviebooing.dto.BookingIdDTO;
+import com.movie.moviebooing.dto.TicketBookingDTO;
+import com.movie.moviebooing.service.BookingCrudServices;
+
+@Controller
+@RequestMapping("/booking")
+public class BookingController 
+{
+	@Autowired
+	BookingCrudServices service;
+	
+	@GetMapping("/get")
+	ResponseEntity<?> getDetails()
+	{
+		return new ResponseEntity<>(service.getService(),HttpStatus.OK);
+	}
+	
+	@PostMapping("/post")
+	ResponseEntity<?> postDetails(@RequestBody TicketBookingDTO bdto)
+	{
+		return new ResponseEntity<>(service.postService(bdto),HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/delete")
+	ResponseEntity<?> deleteDetails()
+	{
+		return new ResponseEntity<>(service.deleteService(null),HttpStatus.OK);
+	}
+	
+	@PutMapping("/update")
+	ResponseEntity<?> putDetails(@RequestBody BookingIdDTO iddto)
+	{
+		return new ResponseEntity<>(service.updateService(null),HttpStatus.OK);
+	}
+	
+	@PutMapping("/verify")
+	ResponseEntity<?> verifydetails()
+	{
+		return new ResponseEntity<>(service.verifyService(null),HttpStatus.OK);
+	}
+
+}

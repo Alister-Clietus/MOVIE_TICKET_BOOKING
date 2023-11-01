@@ -1,0 +1,15 @@
+package com.movie.moviebooing.service;
+
+import org.json.simple.JSONObject;
+
+import com.movie.moviebooing.dto.BookingResponse;
+import com.movie.moviebooing.dto.TicketBookingDTO;
+
+public interface BookingCrudServices 
+{
+	BookingResponse postService(TicketBookingDTO bdto);
+	JSONObject getService(TicketBookingDTO bdto);
+	BookingResponse deleteService(TicketBookingDTO bdto);
+	BookingResponse verifyService(TicketBookingDTO bdto);
+	BookingResponse updateService(TicketBookingDTO bdto);
+}
