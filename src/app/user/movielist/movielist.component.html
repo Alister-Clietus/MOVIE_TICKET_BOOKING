@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let i of bookingData">
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="{{ i.imageUrl }}" alt="Card image cap">
+          <div class="card-body" style="background: rgba(255, 255, 255, 0.7); color: #000;">
+            <button class="btn btn-secondary" [class.btn-danger]="isClicked" (click)="bookticket(i.movieId, i.showtimeId)">Book Ticket For {{ i.movieName }}</button>
+            <p>Show ID: {{ i.showtimeId }}</p>
+            <p>Theater: {{ i.theater }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,126 @@
+<section class="content" id="id-enter" >
+
+    <div class="row ">
+        <div class="col-md-12">
+            <div class="card ipsh-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="far fa-user mr-2 fa-icon-gradient-default"></i>BOOK MOVIE TICKET</h3>
+    
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body bg-dark">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="movieId"><a class="psh-label-requried"></a></label>
+                                <span class="error-msg-span" style="color: red;">{{validationErrors.movieId}}</span>
+                                <input type="number" class="form-control" [(ngModel)]="bookingData.movieId" id="movieId"
+                                    placeholder="Enter Movie ID" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="showid"><a class="psh-label-requried"></a></label>
+                                <span class="error-msg-span" style="color: red;">{{validationErrors.showtimeId}}</span>
+                                <input type="number" class="form-control" [(ngModel)]="bookingData.showtimeId" id="showid"
+                                    placeholder="Enter Show ID" value="">
+    
+                            </div>
+                            <div class="form-group">
+                                <label for="no"><a class="psh-label-requried"></a></label>
+                                <span class="error-msg-span" style="color: red;">{{validationErrors.numberOfTickets}}</span>
+                                <input type="number" class="form-control" [(ngModel)]="bookingData.numberOfTickets" id="no"
+                                    placeholder="Number of Movie Tickets" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="user_resistration_user_group_id"><a class="psh-label-requried"></a></label>
+                                <span class="error-msg-span" style="color: red;">{{validationErrors.customerName}}</span>
+                                <input type="text" class="form-control" [(ngModel)]="bookingData.customerName" id="name"
+                                placeholder="Coustomer Name" value="">
+    
+                            </div>
+                            <div class="form-group">
+                                <label for="user_resistration_user_group_id"><a class="psh-label-requried"></a></label>
+                                <span class="error-msg-span" style="color: red;">{{validationErrors.customerName}}</span>
+                                <input type="text" class="form-control" [(ngModel)]="bookingData.customerName" id="name"
+                                placeholder="Coustomer Name" value="">
+    
+                            </div>
+                        </div>
+    
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email"><a class="psh-label-requried"></a></label>
+                                <span class="error-msg-span" style="color: red;">{{validationErrors.customerEmail}}</span>
+                                <input type="email" class="form-control" [(ngModel)]="bookingData.customerEmail"  id="email"
+                                    placeholder="Enter the Email Address" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cellnumber"><a class="psh-label-requried"></a></label>
+                                <span class="error-msg-span" style="color: red;">{{validationErrors.customerPhone}}</span>
+                                <input type="number" class="form-control" [(ngModel)]="bookingData.customerPhone"  id="cellnumber"
+                                    placeholder="Enter the Phone Number" value="">
+                            </div>
+    
+                            <div class="form-group">
+                                <label for="paymentMethod"><a class="psh-label-requried"></a></label>
+                                <span class="error-msg-span" style="color: red;">{{validationErrors.paymentMethod}}</span>
+                                <select class="form-control" [(ngModel)]="bookingData.paymentMethod" id="paymentMethod">
+                                    <option value="" disabled [ngValue]="null">Select</option>
+                                    <option value="Credit Card">Credit Card</option>
+                                    <option value="Debit Card">Debit Card</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="NetBanking">NetBanking</option>
+                                </select>
+                            </div>
+                            
+    
+                            <div class="form-group">
+                                <label for="user_resistration_user_group_id"><a class="psh-label-requried"></a></label>
+                                <span class="error-msg-span" style="color: red;">{{validationErrors.totalAmount}}</span>
+                                <input type="number" class="form-control" [(ngModel)]="bookingData.totalAmount"  id="amount"
+                                    placeholder="Enter the Amount" >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="user_resistration_user_group_id"><a class="psh-label-requried"></a></label>
+                                <span class="error-msg-span" style="color: red;">{{validationErrors.bookingDate}}</span>
+                                <input type="date" class="form-control" [(ngModel)]="bookingData.bookingDate"  id="date"
+                                    placeholder="Enter the Date" value="">
+                            </div>
+    
+                        </div>
+                    </div>  
+                </div>
+                <div class="card-footer clearfix center">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-dark action-btn" (click)="addUser()">
+                                ADD
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-dark action-btn" (click)="clear()">
+                                CLEAR
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-dark action-btn" (click)="backToUser()">
+                                LIST
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="successMessage">
+                    {{ successMessage }}
+                </div>
+                <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+                    {{ errorMessage }}
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>

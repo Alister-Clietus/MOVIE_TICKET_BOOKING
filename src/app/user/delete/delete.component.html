@@ -1,0 +1,120 @@
+<section class="content" id="id-enter">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card ipsh-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="far fa-user mr-2 fa-icon-gradient-default"></i>BOOK MOVIE TICKET</h3>
+    
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="userId" style="font-weight: bold;">Movie ID<a class="psh-label-requried"></a></label>
+                                <!-- <span class="error-msg-span">{{validationMessage.userId}}</span> -->
+                                <input type="number" class="form-control" [(ngModel)]="bookingData.movieId" id="userId"
+                                    placeholder="Enter Movie ID" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="bankId" style="font-weight: bold;">Show ID<a class="psh-label-requried"></a></label>
+                                <!-- <span class="error-msg-span">{{validationMessage.bankId}}</span> -->
+                                <input type="number" class="form-control" [(ngModel)]="bookingData.showtimeId" id="userId"
+                                    placeholder="Enter Movie ID" value="">
+    
+                            </div>
+                            <div class="form-group">
+                                <label for="userEmailId" style="font-weight: bold;">No of Movie Tickets<a class="psh-label-requried"></a></label>
+                                <!-- <span class="error-msg-span">{{validationMessage.emailId}}</span> -->
+                                <input type="number" class="form-control" [(ngModel)]="bookingData.numberOfTickets" id="userEmailId"
+                                    placeholder="Number of Movie Tickets" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="user_resistration_user_group_id" style="font-weight: bold;">Coustomer Name<a class="psh-label-requried"></a></label>
+                                <!-- <span class="error-msg-span">{{validationMessage.groupId}}</span> -->
+                                <input type="text" class="form-control" [(ngModel)]="bookingData.customerName" id="userEmailId"
+                                placeholder="Coustomer Name" value="">
+    
+                            </div>
+                            <div class="form-group">
+                                <label for="user_resistration_user_group_id" style="font-weight: bold;">Date<a class="psh-label-requried"></a></label>
+                                <!-- <span class="error-msg-span">{{validationMessage.orgDept}}</span> -->
+                                <input type="date" class="form-control" [(ngModel)]="bookingData.bookingDate"  id="cellnumber"
+                                    placeholder="Enter the Date" value="">
+                            </div>
+                        </div>
+    
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="cellnumber" style="font-weight: bold;">Email<a class="psh-label-requried"></a></label>
+                                <!-- <span class="error-msg-span">{{validationMessage.cellNo}}</span> -->
+                                <input type="email" class="form-control" [(ngModel)]="bookingData.customerEmail"  id="cellnumber"
+                                    placeholder="Enter the Email Address" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cellnumber" style="font-weight: bold;">Phone Number<a class="psh-label-requried"></a></label>
+                                <!-- <span class="error-msg-span">{{validationMessage.cellNo}}</span> -->
+                                <input type="number" class="form-control" [(ngModel)]="bookingData.customerPhone"  id="cellnumber"
+                                    placeholder="Enter the Phone Number" value="">
+                            </div>
+    
+                            <div class="form-group">
+                                <label for="user_resistration_user_group_id" style="font-weight: bold;">Payment Method<a class="psh-label-requried"></a></label>
+                                <!-- <span class="error-msg-span">{{validationMessage.orgDept}}</span> -->
+                                <input type="text" class="form-control" [(ngModel)]="bookingData.paymentMethod"  id="cellnumber"
+                                    placeholder="Enter the Payment Method">
+                            </div>
+    
+                            <div class="form-group">
+                                <label for="user_resistration_user_group_id" style="font-weight: bold;">Amount<a class="psh-label-requried"></a></label>
+                                <!-- <span class="error-msg-span">{{validationMessage.orgDept}}</span> -->
+                                <input type="number" class="form-control" [(ngModel)]="bookingData.totalAmount"  id="cellnumber"
+                                    placeholder="Enter the Amount" >
+                            </div>
+
+
+                            <div class="card-footer clearfix">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-primary action-btn" (click)="delete()">
+                                            DELETE USER
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-primary action-btn" (click)="clear()">
+                                            CLEAR
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-primary action-btn" (click)="backToUser()">
+                                            BACK
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="successMessage">
+                    {{ successMessage }}
+                </div>
+                
+                <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+                    {{ errorMessage }}
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <img style="    width: 100%;" src="assets\resources\img\access_denied.jpg">
+      </div>
+    </div>
+    </section>

@@ -1,0 +1,146 @@
+<br>
+<br>
+<br>
+<div class="col-md-12">
+    <div class="card ipsh-card">
+        <div class="card-header">
+            <h3 class="card-title"><i class="far fa-user mr-2 fa-icon-gradient-default"></i>SEARCH MOVIE TICKET</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="userId" style="font-weight: bold;"><a class="psh-label-requried"></a></label>
+                        <input type="text" class="form-control" [(ngModel)]="datasend.movieId" id="userId"
+                            placeholder="Enter Movie ID to Search">
+                    </div>
+                    <div class="form-group">
+                        <label for="bankId" style="font-weight: bold;"><a class="psh-label-requried"></a></label>
+                        <input type="text" class="form-control" [(ngModel)]="datasend.showtimeId" id="userId"
+                            placeholder="Enter Show ID to Search">
+                    </div>
+                    <div class="form-group">
+                        <label for="bankId" style="font-weight: bold;"><a class="psh-label-requried"></a></label>
+                        <input type="text" class="form-control" [(ngModel)]="datasend.customerName" id="userId"
+                            placeholder="Enter Coustomer Name to Search" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="bankId" style="font-weight: bold;"><a class="psh-label-requried"></a></label>
+                        <input type="text" class="form-control" [(ngModel)]="datasend.customerPhone" id="userId"
+                            placeholder="Enter Coustomer Phone Number to Search" value="">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="bankId" style="font-weight: bold;"><a class="psh-label-requried"></a></label>
+                        <input type="text" class="form-control" [(ngModel)]="datasend.bookingDate" id="userId"
+                            placeholder="Enter the Booking Date">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="user_resistration_user_group_id" style="font-weight: bold;"><a class="psh-label-requried"></a></label>
+                        <!-- <span class="error-msg-span">{{validationMessage.orgDept}}</span> -->
+                        <input type="text" class="form-control" [(ngModel)]="datasend.numberOfTickets"  id="cellnumber"
+                            placeholder="Enter the Number of Tickets">
+                    </div>
+                    <div class="form-group">
+                        <label for="user_resistration_user_group_id" style="font-weight: bold;"><a class="psh-label-requried"></a></label>
+                        <!-- <span class="error-msg-span">{{validationMessage.orgDept}}</span> -->
+                        <input type="text" class="form-control" [(ngModel)]="datasend.status"  id="cellnumber"
+                            placeholder="Enter the Status to Search" >
+                    </div>
+                    <div class="form-group">
+                        <label for="bankId" style="font-weight: bold;"><a class="psh-label-requried"></a></label>
+                        <!-- <span class="error-msg-span">{{validationMessage.bankId}}</span> -->
+                        <input type="text" class="form-control" [(ngModel)]="datasend.customerEmail" id="userId"
+                            placeholder="Enter the Coustomer's Email Address">
+                    </div>
+                    <div class="form-group">
+                        <label for="bankId" style="font-weight: bold;"><a class="psh-label-requried"></a></label>
+                        <!-- <span class="error-msg-span">{{validationMessage.bankId}}</span> -->
+                        <input type="text" class="form-control" [(ngModel)]="datasend.totalAmount" id="userId"
+                            placeholder="Enter the Amount to Search" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="bankId" style="font-weight: bold;"><a class="psh-label-requried"></a></label>
+                        <!-- <span class="error-msg-span">{{validationMessage.bankId}}</span> -->
+                        <input type="text" class="form-control" [(ngModel)]="datasend.paymentMethod" id="userId"
+                            placeholder="Enter the Payment Method to Search" value="">
+                    </div>
+                </div>
+            </div>  
+        </div>  
+</div>
+<br>
+
+<div class="row mb-4">
+<div class="card-footer clearfix">
+    <div class="row">
+        <div class="col-md-3">
+            <button type="button" class="btn btn-primary action-btn" (click)="serach()">
+                SEARCH
+            </button>
+        </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-primary action-btn" (click)="navigateToUpdatePage()">
+                CLEAR
+            </button>
+        </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-primary action-btn" (click)="navigateToDataPage()">
+                DATATABLE
+            </button>
+        </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-primary action-btn" (click)="navigateToUpdatePage()">
+                ADD MOVIE
+            </button>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th>CUSTOMER NAME</th>
+                  <th>Movie ID</th>
+                  <th>SHOW ID</th>
+                  <th>NUMBER OF TICKETS</th>
+                  <th>CUSTOMER EMAIL</th>
+                  <th>CUSTOMER PHONE</th>
+                  <th>PAYMENT METHOD</th>
+                  <th>TOTAL AMOUNT</th>
+                  <th>BOOKING DATE</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let i of bookingData">
+                  <td>{{i.customerName}}</td>
+                  <td>{{i.movieId}}</td>
+                  <td>{{i.showtimeId}}</td>
+                  <td>{{i.numberOfTickets}}</td>
+                  <td>{{i.customerEmail}}</td>
+                  <td>{{i.customerPhone}}</td>
+                  <td>{{i.paymentMethod}}</td>
+                  <td>{{i.totalAmount}}</td>
+                  <td>{{i.bookingDate}}</td>
+                  <td>{{i.status}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+</div>
+<br>
+<br>
+<br>
+  

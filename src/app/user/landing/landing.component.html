@@ -1,0 +1,41 @@
+<div class="content">
+    <div class="login-box">
+        <form>
+            <div class="form-outline mb-4">
+                <input type="email" id="loginName" placeholder="Enter UserName" class="form-control" />
+                <label class="form-label" for="loginName"></label>
+              </div>
+        
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <input type="password" id="loginPassword" placeholder="Enter the Password" class="form-control" />
+                <label class="form-label" for="loginPassword"></label>
+              </div>
+
+              <div class="button-container">
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-dark action-btn" (click)="admin()">
+                                    ADMIN
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-dark action-btn" (click)="user()">
+                                    USER
+                                </button>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
