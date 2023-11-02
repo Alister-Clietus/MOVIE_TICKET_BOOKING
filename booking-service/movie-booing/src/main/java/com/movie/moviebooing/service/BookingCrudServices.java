@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import com.movie.moviebooing.dto.BookingIdDTO;
 import com.movie.moviebooing.dto.BookingResponse;
 import com.movie.moviebooing.dto.TicketBookingDTO;
+import com.movie.moviebooing.dto.searchDTO;
 import com.movie.moviebooing.entity.BookingEntity;
 
 public interface BookingCrudServices 
@@ -19,7 +20,7 @@ public interface BookingCrudServices
 	BookingResponse verifyService(BookingIdDTO iddto);
 	BookingResponse updateService(TicketBookingDTO bdto);
 	JSONObject getbyidService(String customerName, String customerPhone);
-	public JSONObject searchByLimits(String searchParam);
-	public JSONObject searchByLimit(String searchParam, int start, int pageSize);
+	public JSONObject searchByLimits(searchDTO bdto);
+//	public JSONObject searchByLimit(String searchParam, int start, int pageSize);
 	public List<BookingEntity> searchByParameterstrial(TicketBookingDTO searchParam);
 }

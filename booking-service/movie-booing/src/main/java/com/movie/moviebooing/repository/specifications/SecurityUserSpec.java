@@ -12,68 +12,127 @@ import org.json.simple.parser.ParseException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
+import com.movie.moviebooing.dto.TicketBookingDTO;
+import com.movie.moviebooing.dto.searchDTO;
 import com.movie.moviebooing.entity.BookingEntity;
 
 
 
-public class SecurityUserSpec {
-	public static Specification<BookingEntity> getUserSpec(String searchParam) {
-		return new Specification<BookingEntity>() {
-			public Predicate toPredicate(Root<BookingEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-				Predicate finalPredicate = null;
-				JSONParser parser = new JSONParser();
-				JSONObject searchObject;
-				try {
-					System.out.println(searchParam);
-					searchObject = (JSONObject) parser.parse(searchParam);
-					System.out.println("***********************************************");
-					System.out.println(searchParam);
-					String movieid = (String) searchObject.get("movieId");
-					String showtimeId = (String) searchObject.get("showtimeId");
-					String numberOfTickets = (String) searchObject.get("numberOfTickets");
-					String status = (String) searchObject.get("status");
-		            if(!StringUtils.isEmpty(movieid)) {
-		            	Predicate statusPredicate = criteriaBuilder.equal(root.get("status"), movieid);
-		            	finalPredicate = criteriaBuilder.and(statusPredicate);
+public class SecurityUserSpec 
+{
+	public static Specification<BookingEntity> getUserSpec(searchDTO searchParam) 
+	{
+		return new Specification<BookingEntity>() 
+		{
+			public Predicate toPredicate(Root<BookingEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) 
+			{
+				Predicate finalPredicate = null;	
+		        try {
+		            if (searchParam.getMovieId() != 0) {
+		            	Predicate movieidPredicate= criteriaBuilder.equal(root.get("movieId"), searchParam.getMovieId());
+		            	finalPredicate = criteriaBuilder.and(movieidPredicate);
 		            }
-		            
-		            if(!StringUtils.isEmpty(showtimeId)) {
-		            	Predicate statusPredicate = criteriaBuilder.equal(root.get("status"), showtimeId);
+		            if (searchParam.getBookingDate() != null) {
+		            	Predicate bookingdatePredicate= criteriaBuilder.like(root.get("bookingDate"), "%"+searchParam.getBookingDate()+"%");
 		            	if(finalPredicate!=null) {
-		            		finalPredicate = criteriaBuilder.and(finalPredicate, statusPredicate);
+		            		finalPredicate = criteriaBuilder.and(finalPredicate,bookingdatePredicate);
+		            		System.out.println();
 		            	}else {
-		            		finalPredicate = criteriaBuilder.and(statusPredicate);
-		            	}
-		            	
-		            }
-		            
-		            if(!StringUtils.isEmpty(numberOfTickets)) {
-		            	Predicate statusPredicate = criteriaBuilder.equal(root.get("status"), numberOfTickets);
-		            	if(finalPredicate!=null) {
-		            		finalPredicate = criteriaBuilder.and(finalPredicate, statusPredicate);
-		            	}else {
-		            		finalPredicate = criteriaBuilder.and(statusPredicate);
+		            		finalPredicate = criteriaBuilder.and(bookingdatePredicate);
 		            	}
 		            }
-		            
-		            if(!StringUtils.isEmpty(status)) {
-		            	Predicate userIdPredicate = criteriaBuilder.like(criteriaBuilder.upper(root.get("status")), "%"+status.toUpperCase()+"%");
+		            if (searchParam.getShowtimeId() != 0) {
+		            	Predicate showtimepredicates=criteriaBuilder.equal(root.get("showtimeId"), searchParam.getShowtimeId());
 		            	if(finalPredicate!=null) {
-		            		finalPredicate = criteriaBuilder.and(finalPredicate, userIdPredicate);
+		            		finalPredicate = criteriaBuilder.and(finalPredicate,showtimepredicates);
 		            	}else {
-		            		finalPredicate = criteriaBuilder.and(userIdPredicate);
+		            		finalPredicate = criteriaBuilder.and(showtimepredicates);
 		            	}
 		            }
-		            
+		            if (searchParam.getCustomerName() != null) {
+		            	Predicate namepredicates=criteriaBuilder.like(root.get("id").get("customerName"),"%"+searchParam.getCustomerName()+"%");
+		            	if(finalPredicate!=null) {
+		            		finalPredicate = criteriaBuilder.and(finalPredicate,namepredicates);
+		            	}else {
+		            		finalPredicate = criteriaBuilder.and(namepredicates);
+		            	}
+		            }
+		            if (searchParam.getCustomerPhone() != null) {
+		            	Predicate phonepredicates=criteriaBuilder.like(root.get("id").get("customerPhone"), "%"+searchParam.getCustomerPhone()+"%");
+		            	if(finalPredicate!=null) {
+		            		finalPredicate = criteriaBuilder.and(finalPredicate,phonepredicates);
+		            	}else {
+		            		finalPredicate = criteriaBuilder.and(phonepredicates);
+		            	}
+		            }
+		            if (searchParam.getCustomerEmail() != null) {
+
+		            	Predicate emailpredicates=criteriaBuilder.like(root.get("email"), "%"+searchParam.getCustomerEmail()+"%");
+		            	if(finalPredicate!=null) {
+		            		finalPredicate = criteriaBuilder.and(finalPredicate,emailpredicates);
+		            	}else {
+		            		finalPredicate = criteriaBuilder.and(emailpredicates);
+		            	}
+		            }
+		            if (searchParam.getPaymentMethod() != null) {
+		            	System.out.println(searchParam.getPaymentMethod());
+
+		            	Predicate methodpredicates=criteriaBuilder.like(root.get("paymentMethod"),"%"+searchParam.getPaymentMethod()+"%");
+		            	if(finalPredicate!=null) {
+		            		finalPredicate = criteriaBuilder.and(finalPredicate,methodpredicates);
+		            	}else {
+		            		finalPredicate = criteriaBuilder.and(methodpredicates);
+		            	}
+		            }
+		            if (searchParam.getNumberOfTickets() != 0) {
+		            	System.out.println(searchParam.getNumberOfTickets());
+
+		            	Predicate numberpredicates=criteriaBuilder.equal(root.get("numberOfTickets"), searchParam.getNumberOfTickets());
+		            	if(finalPredicate!=null) {
+		            		finalPredicate = criteriaBuilder.and(finalPredicate,numberpredicates);
+		            	}else {
+		            		finalPredicate = criteriaBuilder.and(numberpredicates);
+		            	}
+		            }
+		            if (searchParam.getTotalAmount() != 0) {
+		            	System.out.println(searchParam.getTotalAmount());
+
+		            	Predicate amountpredicates=criteriaBuilder.equal(root.get("totalAmount"), searchParam.getTotalAmount());
+		            	if(finalPredicate!=null) {
+		            		finalPredicate = criteriaBuilder.and(finalPredicate,amountpredicates);
+		            	}else {
+		            		finalPredicate = criteriaBuilder.and(amountpredicates);
+		            	}
+		            }
+		            if (searchParam.getStatus() != null) {
+		            	System.out.println(searchParam.getStatus());
+
+		            	Predicate statuspredicates=criteriaBuilder.like(root.get("status"), "%"+searchParam.getStatus()+"%");
+		            	if(finalPredicate!=null) {
+		            		finalPredicate = criteriaBuilder.and(finalPredicate,statuspredicates);
+		            	}else {
+		            		finalPredicate = criteriaBuilder.and(statuspredicates);
+		            	}
+		            }
+
+//		            System.out.println("***********************************");
 		            Order proTimeOrder = criteriaBuilder.desc(root.get("modifiedby"));
+//		            System.out.println(proTimeOrder);
 		            query.orderBy(proTimeOrder);
 		            
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-	            
+		            
+		        } 
+		        catch (Exception e) 
+		        {
+		            e.printStackTrace();
+		        }
+		        System.out.println(finalPredicate);
+		        System.out.println("***********************************");
 				return finalPredicate;
-			}
-		};
+
+		} 
+		}; 
 	}
-}
+} 
+
+

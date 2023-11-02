@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.movie.moviebooing.dto.BookingIdDTO;
 import com.movie.moviebooing.dto.BookingResponse;
 import com.movie.moviebooing.dto.TicketBookingDTO;
+import com.movie.moviebooing.dto.searchDTO;
 import com.movie.moviebooing.entity.BookingEntity;
 import com.movie.moviebooing.entity.BookingID;
 import com.movie.moviebooing.repository.BookingTable;
@@ -153,7 +154,7 @@ public class BookingCrudServiceImp implements BookingCrudServices
             BookingEntity bookingEntity = bookingOptional.get();
 
            
-            bookingEntity.setStatus("verified");
+            bookingEntity.setStatus("VERIFIED");
             bookingEntity.setModifiedby(new Date());
 
            
@@ -261,58 +262,58 @@ public class BookingCrudServiceImp implements BookingCrudServices
 	}
 	
 	
-	public JSONObject searchByLimit(String searchParam, int start, int pageSize) {
-		JSONObject result = new JSONObject();
-		try {
-			PageRequest pageable = PageRequest.of(start / pageSize, pageSize);
-			Specification<BookingEntity> spec = SecurityUserSpec.getUserSpec(searchParam);
-			Page<BookingEntity> usersList = repo.findAll(spec, pageable);
-			JSONArray array = new JSONArray();
-			JSONArray countByStatus = countByStatus(spec);
-			for (BookingEntity users : usersList) {
-				JSONObject obj = new JSONObject();
-				JSONObject bookingObject = new JSONObject();
-	            bookingObject.put("movieId", users.getMovieId());
-	            bookingObject.put("showtimeId", users.getShowtimeId());
-	            bookingObject.put("numberOfTickets", users.getNumberOfTickets());
-	            bookingObject.put("customerName", users.getId().getCustomerName());
-	            bookingObject.put("customerPhone", users.getId().getCustomerPhone());
-	            bookingObject.put("customerEmail", users.getEmail());
-	            bookingObject.put("paymentMethod", users.getPaymentMethod());
-	            bookingObject.put("totalAmount", users.getTotalAmount());
-	            bookingObject.put("bookingDate", users.getBookingDate());
-	            bookingObject.put("status", users.getStatus());
-	    
-	            array.add(bookingObject);
-			}
-			result.put("aaData", array);
-//			result.put("iTotalDisplayRecords", studentrepo.findAll(spec).size());
-//			result.put("iTotalRecords", studentrepo.findAll(spec).size());
-			result.put("countByStatus", countByStatus);
-		} catch (Exception e) {
-//			logger.error("Error : " + e.getMessage(), e);
-			e.printStackTrace();
-		}
-		return result;
-	}
-	
-	private JSONArray countByStatus(Specification<BookingEntity> spec) {
-		JSONArray array = new JSONArray();
-		try {
-			List<BookingEntity> headerList = repo.findAll(spec);
-			Map<String, Long> countByStatus = headerList.stream()
-					.collect(Collectors.groupingBy(BookingEntity::getStatus, Collectors.counting()));
-			for (String status : countByStatus.keySet()) {
-				JSONObject obj = new JSONObject();
-				obj.put("name", status);
-				obj.put("count", countByStatus.get(status));
-				array.add(obj);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return array;
-	}
+//	public JSONObject searchByLimit(TicketBookingDTO searchParam, int start, int pageSize) {
+//		JSONObject result = new JSONObject();
+//		try {
+//			PageRequest pageable = PageRequest.of(start / pageSize, pageSize);
+//			Specification<BookingEntity> spec = SecurityUserSpec.getUserSpec(searchParam);
+//			Page<BookingEntity> usersList = repo.findAll(spec, pageable);
+//			JSONArray array = new JSONArray();
+//			JSONArray countByStatus = countByStatus(spec);
+//			for (BookingEntity users : usersList) {
+//				JSONObject obj = new JSONObject();
+//				JSONObject bookingObject = new JSONObject();
+//	            bookingObject.put("movieId", users.getMovieId());
+//	            bookingObject.put("showtimeId", users.getShowtimeId());
+//	            bookingObject.put("numberOfTickets", users.getNumberOfTickets());
+//	            bookingObject.put("customerName", users.getId().getCustomerName());
+//	            bookingObject.put("customerPhone", users.getId().getCustomerPhone());
+//	            bookingObject.put("customerEmail", users.getEmail());
+//	            bookingObject.put("paymentMethod", users.getPaymentMethod());
+//	            bookingObject.put("totalAmount", users.getTotalAmount());
+//	            bookingObject.put("bookingDate", users.getBookingDate());
+//	            bookingObject.put("status", users.getStatus());
+//	    
+//	            array.add(bookingObject);
+//			}
+//			result.put("aaData", array);
+////			result.put("iTotalDisplayRecords", studentrepo.findAll(spec).size());
+////			result.put("iTotalRecords", studentrepo.findAll(spec).size());
+//			result.put("countByStatus", countByStatus);
+//		} catch (Exception e) {
+////			logger.error("Error : " + e.getMessage(), e);
+//			e.printStackTrace();
+//		}
+//		return result;
+//	}
+//	
+//	private JSONArray countByStatus(Specification<BookingEntity> spec) {
+//		JSONArray array = new JSONArray();
+//		try {
+//			List<BookingEntity> headerList = repo.findAll(spec);
+//			Map<String, Long> countByStatus = headerList.stream()
+//					.collect(Collectors.groupingBy(BookingEntity::getStatus, Collectors.counting()));
+//			for (String status : countByStatus.keySet()) {
+//				JSONObject obj = new JSONObject();
+//				obj.put("name", status);
+//				obj.put("count", countByStatus.get(status));
+//				array.add(obj);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return array;
+//	}
 
 
 	
@@ -358,15 +359,10 @@ public class BookingCrudServiceImp implements BookingCrudServices
 	
 	
 	public List<BookingEntity> searchByParameterstrial(TicketBookingDTO searchParam) {
-		System.out.println("***************************************************");
-		System.out.println(searchParam);
 	    Specification<BookingEntity> spec = (root, query, criteriaBuilder) -> {
 	        Predicate finalPredicate = null;
 	        try {
-	    		System.out.println("***************************************************");
-	    		System.out.println(searchParam);
 	            if (searchParam.getMovieId() != 0) {
-		    		System.out.println("***************************************************");
 	            	System.out.println(searchParam.getMovieId());
 	            	Predicate movieidPredicate= criteriaBuilder.equal(root.get("movieId"), searchParam.getMovieId());
 	            	finalPredicate = criteriaBuilder.and(movieidPredicate);
@@ -376,12 +372,13 @@ public class BookingCrudServiceImp implements BookingCrudServices
 	            	Predicate bookingdatePredicate= criteriaBuilder.equal(root.get("bookingDate"), searchParam.getBookingDate());
 	            	if(finalPredicate!=null) {
 	            		finalPredicate = criteriaBuilder.and(finalPredicate,bookingdatePredicate);
+	            		System.out.println();
 	            	}else {
 	            		finalPredicate = criteriaBuilder.and(bookingdatePredicate);
 	            	}
 	            }
 	            if (searchParam.getShowtimeId() != 0) {
-	            	System.out.println(searchParam.getBookingDate());
+	            	System.out.println(searchParam.getShowtimeId());
 	            	Predicate showtimepredicates=criteriaBuilder.equal(root.get("showtimeId"), searchParam.getShowtimeId());
 	            	if(finalPredicate!=null) {
 	            		finalPredicate = criteriaBuilder.and(finalPredicate,showtimepredicates);
@@ -428,7 +425,7 @@ public class BookingCrudServiceImp implements BookingCrudServices
 	            	}
 	            }
 	            if (searchParam.getNumberOfTickets() != 0) {
-	            	System.out.println(searchParam.getPaymentMethod());
+	            	System.out.println(searchParam.getNumberOfTickets());
 
 	            	Predicate numberpredicates=criteriaBuilder.equal(root.get("numberOfTickets"), searchParam.getNumberOfTickets());
 	            	if(finalPredicate!=null) {
@@ -448,24 +445,29 @@ public class BookingCrudServiceImp implements BookingCrudServices
 	            	}
 	            }
 
+//	            System.out.println("***********************************");
 	            Order proTimeOrder = criteriaBuilder.desc(root.get("modifiedby"));
+//	            System.out.println(proTimeOrder);
 	            query.orderBy(proTimeOrder);
+	            
+	            
 	        } 
 	        catch (Exception e) 
 	        {
 	            e.printStackTrace();
 	        }
-	        
+	        System.out.println("***********************************");
 	        System.out.println(finalPredicate);
-	        return finalPredicate;
+	        	        return finalPredicate;
 	    };
-	    
+        System.out.println(spec);
 	    List<BookingEntity> results = repo.findAll(spec);
-
 	    return results;
 	}
 	
-	public JSONObject searchByLimits(String searchParam)
+	
+	
+	public JSONObject searchByLimits(searchDTO searchParam)
 	{
 		Specification<BookingEntity> spec = SecurityUserSpec.getUserSpec(searchParam);
 		List<BookingEntity> usersList = repo.findAll(spec);
@@ -501,6 +503,13 @@ public class BookingCrudServiceImp implements BookingCrudServices
 	  }
 		return result;
 		
+	}
+
+
+
+	public JSONObject searchByLimit(String searchParam, int start, int pageSize) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

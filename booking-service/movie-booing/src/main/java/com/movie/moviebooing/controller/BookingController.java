@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.movie.moviebooing.dto.BookingIdDTO;
 import com.movie.moviebooing.dto.TicketBookingDTO;
+import com.movie.moviebooing.dto.searchDTO;
 import com.movie.moviebooing.entity.BookingEntity;
 import com.movie.moviebooing.service.BookingCrudServices;
 
@@ -77,15 +78,15 @@ public class BookingController
 //		JSONObject list = service.searchByLimits(searchParam);	
 		System.out.println("sdfsdfsdfsdfsdfsdfsdfsfsdfsdfsdfsdf");
 		System.out.println(searchParam);
-//		service.searchByLimits(searchParam)
+//		C
 		return new ResponseEntity<>("hello", new HttpHeaders(), HttpStatus.OK);
 	}
 	
 	@PostMapping("/search/dto")
-	public ResponseEntity<?> searchByPagedto(TicketBookingDTO searchParam)
+	public ResponseEntity<?> searchByPagedto(@RequestBody searchDTO searchParam)
 	{
 
-		return new ResponseEntity<>(service.searchByParameterstrial(searchParam), new HttpHeaders(), HttpStatus.OK);
+		return new ResponseEntity<>(service.searchByLimits(searchParam), new HttpHeaders(), HttpStatus.OK);
 	}
 
 
